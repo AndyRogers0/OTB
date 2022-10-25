@@ -38,16 +38,61 @@ namespace HolidaySearchTests
         [TestMethod]
         public void TestCustomer1()
         {
+            var holidaySearchQuery = new HolidaySearchQuery()
+            {
+                DepartingFrom = "MAN",
+                TravelingTo = "AGP",
+                DepartureDate = "2023/07/01",
+                Duration = 7
+            };
+
+            int expectedFlight = 2;
+            int expectedHotel = 9;
+
+            var searchQueryResults = _holidaySearchService.GetHolidaySearchResults(holidaySearchQuery);
+
+            Assert.AreEqual(expectedFlight, searchQueryResults.Flight, "Incorrect flight details returned");
+            Assert.AreEqual(expectedHotel, searchQueryResults.Hotel, "Incorrect hotel details returned");
         }
 
         [TestMethod]
         public void TestCustomer2()
         {
+            var holidaySearchQuery = new HolidaySearchQuery()
+            {
+                DepartingFrom = "Any London",
+                TravelingTo = "PMI",
+                DepartureDate = "2023/06/15",
+                Duration = 10
+            };
+
+            int expectedFlight = 6;
+            int expectedHotel = 5;
+
+            var searchQueryResults = _holidaySearchService.GetHolidaySearchResults(holidaySearchQuery);
+
+            Assert.AreEqual(expectedFlight, searchQueryResults.Flight, "Incorrect flight details returned");
+            Assert.AreEqual(expectedHotel, searchQueryResults.Hotel, "Incorrect hotel details returned");
         }
 
         [TestMethod]
         public void TestCustomer3()
         {
+            var holidaySearchQuery = new HolidaySearchQuery()
+            {
+                DepartingFrom = "Any",
+                TravelingTo = "LPA",
+                DepartureDate = "2022/11/10",
+                Duration = 14
+            };
+
+            int expectedFlight = 7;
+            int expectedHotel = 6;
+
+            var searchQueryResults = _holidaySearchService.GetHolidaySearchResults(holidaySearchQuery);
+
+            Assert.AreEqual(expectedFlight, searchQueryResults.Flight, "Incorrect flight details returned");
+            Assert.AreEqual(expectedHotel, searchQueryResults.Hotel, "Incorrect hotel details returned");
         }
 
         private List<Flight> GetFlights()

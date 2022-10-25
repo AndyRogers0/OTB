@@ -22,9 +22,15 @@ namespace HolidaySearch.Services
         /// </summary>
         /// <param name="holidaySearchQuery">A fully populated holiday search query</param>
         /// <returns></returns>
-        public string GetHolidaySearchResults(HolidaySearchQuery holidaySearchQuery)
+        public SearchQueryResult GetHolidaySearchResults(HolidaySearchQuery holidaySearchQuery)
         {
-            return "";
+            var searchQueryResult = new SearchQueryResult()
+            {
+                Flight = 0,
+                Hotel = 0
+            };
+
+            return searchQueryResult;
         } 
     }
 }
