@@ -1,9 +1,4 @@
 ﻿using HolidaySearch.DomainModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HolidaySearch.PublicInterfaces
 {
@@ -11,5 +6,6 @@ namespace HolidaySearch.PublicInterfaces
     {
         List<Flight> GetFlights();
         List<Hotel> GetHotels();
+        List<string> GetAirportsAtLocation(string location);
     }
 }

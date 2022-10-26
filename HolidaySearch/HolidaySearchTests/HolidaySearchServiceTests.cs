@@ -70,6 +70,12 @@ namespace HolidaySearchTests
             int expectedFlight = 6;
             int expectedHotel = 5;
 
+            // set up location query
+            string location = "London";
+            var locationAirports = new List<string>() { "LGW", "LTN" };
+
+            _holidayDataSourceMock.Setup(h => h.GetAirportsAtLocation(location)).Returns(locationAirports);
+
             var searchQueryResults = _holidaySearchService.GetHolidaySearchResults(holidaySearchQuery);
 
             Assert.AreEqual(expectedFlight, searchQueryResults.Flight, "Incorrect flight details returned");
