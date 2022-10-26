@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HolidaySearch.Models
+namespace HolidaySearch.DomainModels
 {
-    public class Flight
+    internal class Flight
     {
         public int Id { get; set; }
         public string? Airline { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HolidaySearch.Models
 {
-    public class SearchQueryResult
+    public class HolidaySearchQueryResult
     {
         public int Flight { get; set; }
         public int Hotel { get; set; }

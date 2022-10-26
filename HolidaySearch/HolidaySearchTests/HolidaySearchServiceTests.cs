@@ -1,6 +1,7 @@
-﻿using HolidaySearch.Interfaces;
+﻿using HolidaySearch;
+using HolidaySearch.DomainModels;
 using HolidaySearch.Models;
-using HolidaySearch.Services;
+using HolidaySearch.PublicInterfaces;
 using Moq;
 using Newtonsoft.Json;
 using System;
