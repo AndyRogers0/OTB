@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("HolidaySearchTests")]
@@ -37,6 +39,8 @@ namespace HolidaySearch
         /// <returns></returns>
         public HolidaySearchQueryResult GetHolidaySearchResults(HolidaySearchQuery holidaySearchQuery)
         {
+            validateHolidaySearchQuery(holidaySearchQuery);
+
             var hotels = _holidayDataSource.GetHotels();
             var flights = _holidayDataSource.GetFlights();
 
@@ -57,5 +61,23 @@ namespace HolidaySearch
 
             return searchQueryResult;
         }
+
+        /// <summary>
+        /// Check the pre-conditions of the method are valid
+        /// </summary>
+        /// <param name="holidaySearchQuery"></param>
+        /// <exception cref="ArgumentException"></exception>
+        private void validateHolidaySearchQuery(HolidaySearchQuery holidaySearchQuery)
+        {
+            if (holidaySearchQuery == null
+                || string.IsNullOrEmpty(holidaySearchQuery.TravelingTo)
+                || string.IsNullOrEmpty(holidaySearchQuery.DepartingFrom)
+                || string.IsNullOrEmpty(holidaySearchQuery.DepartureDate)
+                || holidaySearchQuery.Duration < 1)
+            {
+                throw new ArgumentException($"Invalid holiday search query, received: {JsonSerializer.Serialize(holidaySearchQuery)}");
+            }
+        }
+
     }
 }
