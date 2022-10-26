@@ -1,4 +1,5 @@
-﻿using HolidaySearch.Models;
+﻿using HolidaySearch.DomainModels;
+using HolidaySearch.Models;
 using HolidaySearch.PublicInterfaces;
 using System;
 using System.Collections.Generic;
@@ -42,26 +43,15 @@ namespace HolidaySearch
         {
             validateHolidaySearchQuery(holidaySearchQuery);
 
-            var hotels = _holidayDataSource.GetHotels();
-            var flights = _holidayDataSource.GetFlights();
+            var searchQueryResult = new HolidaySearchQueryResult();
 
-            // Outbound Flight
-            // resolve list of possible departing airport
-            bool isAnyAirport = holidaySearchQuery.DepartingFrom == "Any";
-            var departingAirports = GetListOfAirportsFromSearchQuery(holidaySearchQuery.DepartingFrom);
-
-            // filter flights by destination airport, departing airport, and date
-            // get the cheapest and add to result
+            searchQueryResult.Flight = GetCheapestOutboundFlight(holidaySearchQuery);
 
             // Hotel
+            var hotels = _holidayDataSource.GetHotels();
             // Filter list of hotels by date, nights, and local airports
             // get the cheapest and add to the results
 
-            var searchQueryResult = new HolidaySearchQueryResult()
-            {
-                Flight = 0,
-                Hotel = 0
-            };
 
             return searchQueryResult;
         }
@@ -81,6 +71,30 @@ namespace HolidaySearch
             {
                 throw new ArgumentException($"Invalid holiday search query, received: {JsonSerializer.Serialize(holidaySearchQuery)}");
             }
+        }
+
+        private int? GetCheapestOutboundFlight(HolidaySearchQuery holidaySearchQuery)
+        {
+            // get all flights
+            var flights = _holidayDataSource.GetFlights();
+
+            // resolve list of possible departing airport
+            bool isAnyAirport = holidaySearchQuery.DepartingFrom == "Any";
+            var departingAirports = GetListOfAirportsFromSearchQuery(holidaySearchQuery.DepartingFrom!);
+            var departureDate = DateTime.Parse(holidaySearchQuery.DepartureDate!);
+
+            // filter flights by destination airport, departing airport, and date
+            var possibleFlights = flights.Where(flight => flight.To == holidaySearchQuery.TravelingTo
+                                                     && (isAnyAirport || departingAirports.Contains(flight.From!))
+                                                     && flight.DepartureDate.Date.Equals(departureDate.Date))
+                                         .OrderBy(flight => flight.Price);
+
+            // get the cheapest and add to result
+            if (possibleFlights.Any())
+            {
+                return possibleFlights.First().Id;
+            }
+            else return null;
         }
 
 

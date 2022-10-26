@@ -8,7 +8,7 @@ namespace HolidaySearch.Models
 {
     public class HolidaySearchQueryResult
     {
-        public int Flight { get; set; }
-        public int Hotel { get; set; }
+        public int? Flight { get; set; }
+        public int? Hotel { get; set; }
     }
 }
