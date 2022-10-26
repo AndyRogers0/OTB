@@ -46,12 +46,7 @@ namespace HolidaySearch
             var searchQueryResult = new HolidaySearchQueryResult();
 
             searchQueryResult.Flight = GetCheapestOutboundFlight(holidaySearchQuery);
-
-            // Hotel
-            var hotels = _holidayDataSource.GetHotels();
-            // Filter list of hotels by date, nights, and local airports
-            // get the cheapest and add to the results
-
+            searchQueryResult.Hotel = GetCheapestHotel(holidaySearchQuery);
 
             return searchQueryResult;
         }
@@ -89,7 +84,7 @@ namespace HolidaySearch
                                                      && flight.DepartureDate.Date.Equals(departureDate.Date))
                                          .OrderBy(flight => flight.Price);
 
-            // get the cheapest and add to result
+            // return the cheapest
             if (possibleFlights.Any())
             {
                 return possibleFlights.First().Id;
@@ -97,6 +92,25 @@ namespace HolidaySearch
             else return null;
         }
 
+        private int? GetCheapestHotel(HolidaySearchQuery holidaySearchQuery)
+        {
+            // Get all flights
+            var hotels = _holidayDataSource.GetHotels();
+            
+            // filter and order them
+            var date = DateTime.Parse(holidaySearchQuery.DepartureDate!);
+            var possibleHotels = hotels.Where(hotel => hotel.LocalAirports!.Contains(holidaySearchQuery.TravelingTo!)
+                                                       && hotel.Nights == holidaySearchQuery.Duration
+                                                       && hotel.ArrivalDate.Date.Equals(date.Date))
+                                       .OrderBy(hotel => hotel.PricePerNight);
+            
+            // return the cheapest
+            if (possibleHotels.Any())
+            {
+                return possibleHotels.First().Id;
+            }
+            else return null;
+        }
 
         private List<string> GetListOfAirportsFromSearchQuery(string airportQuery)
         {
